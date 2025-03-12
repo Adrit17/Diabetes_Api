@@ -1,2 +1,2 @@
-# Diabete_Api
+# DiabeteS_Api
 Diabetes Prediciton using DNN
