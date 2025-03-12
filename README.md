@@ -1,4 +1,7 @@
-# Diabetes_Api
+# Diabetes_Api 
+
+A fastapi built for predicting diabetes using DNN
+
 Main.py
 1. Key Components:
 
