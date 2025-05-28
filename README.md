@@ -1,4 +1,4 @@
-# Diabetes Prediction API using Neural Network
+# Diabetes Prediction API using Deep Neural Network
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
