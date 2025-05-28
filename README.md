@@ -1,95 +1,53 @@
-# Diabetes_Api 
+# Diabetes Prediction API using Neural Network
 
-A fastapi built for predicting diabetes using DNN
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.78-green)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 
-Main.py
-1. Key Components:
+---
 
-Imports:
+## Overview
 
-- FastAPI: Framework for building the API.
-- numpy: Handles numerical operations.
-- tensorflow: Loads the pre-trained deep learning model.
-- joblib: Loads the data scaler for preprocessing.
-- pydantic.BaseModel: Defines the expected input data format. 
+This project is a **diabetes prediction system** built with a TensorFlow-based neural network. It takes clinical patient data as input, scales and preprocesses it, then predicts the likelihood of diabetes. The API is built using **FastAPI** to provide real-time predictions.
 
-  ![Screenshot 2025-03-12 202542](https://github.com/user-attachments/assets/7eddfd7d-9464-4ec1-aaad-27781d218145)
+The model handles common medical data preprocessing tasks including unit conversion (mg/dL to mmol/L), class imbalance, and threshold tuning to maximize F1-score for robust diagnosis.
 
+---
 
-2. Model and Scaler Loading:
+## Features
 
-- The pre-trained deep learning model (diabetes_model.h5) is loaded using TensorFlow.
-- The scaler.pkl file (saved with joblib) is loaded for normalizing input data.
-  
-  ![Screenshot 2025-03-12 203637](https://github.com/user-attachments/assets/86db9f09-dbaa-4dec-9f0d-617bd5378495)
+- Trained deep neural network with dropout and L2 regularization  
+- Scales and preprocesses patient clinical data  
+- Automatically converts common lab units (mg/dL → mmol/L)  
+- Threshold tuning for optimal precision-recall balance  
+- Real-time prediction API using FastAPI  
+- Easy to extend or retrain with your own dataset  
 
-3. API Setup:
+---
 
-- Root Endpoint (/): Returns a simple message to indicate the API is running.
+## Files
 
-  ![Screenshot 2025-03-12 204543](https://github.com/user-attachments/assets/9307cf4c-3523-4190-bc97-25807314bf87)
+| Filename       | Description                                    |
+|----------------|------------------------------------------------|
+| `train_test.py`| Script to train, evaluate, and save the model. |
+| `main.py`      | FastAPI app exposing the prediction endpoint.  |
+| `scaler.pkl`   | Saved StandardScaler used in preprocessing.    |
+| `diabetes_model.keras` | Saved trained neural network model.    |
+| `README.md`    | Project overview and instructions.             |
 
-- Prediction Endpoint (/predict):
-  i/ Accepts JSON input containing patient health metrics.
-  ii/ Preprocesses the input using the loaded scaler.
-  iii/ Feeds the processed input into the deep learning model for prediction.
-  iv/ Returns a prediction result ("Diabetic" or "Not Diabetic") along with confidence score.
+---
 
-  ![Screenshot 2025-03-12 204718](https://github.com/user-attachments/assets/4944010b-6d80-418f-aa4d-834cea3e744e)
+## Requirements
 
+- Python 3.8 or higher  
+- TensorFlow 2.x  
+- scikit-learn  
+- FastAPI  
+- joblib  
+- uvicorn (for running the API)  
 
+Install dependencies:
 
-Train_Model.py
-
-1. Key imports: 
-
-
-![Screenshot 2025-03-12 205109](https://github.com/user-attachments/assets/bf8ec03f-4b8d-4404-932d-bbae1b74b2b9)
-
-
-2. Loading and Preparing Data
-
-- Reads diabetes.csv dataset.
-- Selects key health features (Glucose, BMI, age).
-- Splits data into training (80%) and testing (20%) sets.
-  
-  ![Screenshot 2025-03-12 205521](https://github.com/user-attachments/assets/3e61d83b-def4-46bf-8bdd-2cf6bb4ee8ea)
-
-
-3. Data Preprocessing
-
- - Uses StandardScaler to normalize input features.
- - Saves the trained scaler as scaler.pkl for future use.
-  
-   ![Screenshot 2025-03-12 205934](https://github.com/user-attachments/assets/bd0691b9-c94e-4574-8aad-8a16c2bf7631)
-
-
-4. Building the Neural Network:
-   
- A sequential model with:
-  - 16 neurons (ReLU activation, L2 regularization)
-  - 8 neurons (ReLU activation)
-  - 1 neuron (Sigmoid activation for binary classification)
-  - Compiled with Adam optimizer and binary cross-entropy loss.
-
-    ![Screenshot 2025-03-12 210512](https://github.com/user-attachments/assets/c9341339-1034-4c9c-a83c-2a8e9a5a7e6a)
-
-
-5. Training the Model:
-   - Runs for 20 epochs with batch size 8.
-   - Uses validation data to track performance.
-  
-    ![Screenshot 2025-03-12 210900](https://github.com/user-attachments/assets/d8480f6f-cdb9-44ab-9aaa-8bed4e1b6a75)
-
-
-
-6. Saving the Model:
-   - Saves the trained model as diabetes_model.h5.
-   - Prints confirmation message when training is complete.
-  
-
-     ![Screenshot 2025-03-12 211212](https://github.com/user-attachments/assets/5ac8373d-9494-4246-a1fd-18ef3680521e)
-
-
-
- 
+```bash
+pip install tensorflow scikit-learn fastapi joblib uvicorn
