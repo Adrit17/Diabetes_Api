@@ -1,40 +1,85 @@
-import numpy as np
 import pandas as pd
-import tensorflow
-import joblib
-from tensorflow import keras
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.regularizers import l2
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils import class_weight
+import joblib
+from sklearn.metrics import precision_recall_curve
 
+# Load dataset
 df = pd.read_csv("C:/Users/DCL/Desktop/Research Paper/diabetes.csv")
 
-
-features = ["Pregnancies", "Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI",
-            "DiabetesPedigreeFunction", "Age"]
-
-target = "Result"
+# Features and target
+features = ["Age", "Gender", "BMI", "SBP", "DBP", "FPG", "Chol", "Tri",
+            "HDL", "LDL", "ALT", "BUN", "CCR", "FFPG", "smoking", "drinking", "family_history"]
+target = "Diabetes"
 
 X = df[features]
 y = df[target]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Split dataset (stratified)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, stratify=y, test_size=0.2, random_state=42)
 
+# Scale features
 scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
 
-joblib.dump(scaler, "scaler,pkl")
+# Save scaler for API
+joblib.dump(scaler, "scaler.pkl")
 
-model = keras.Sequential([keras.layers.Dense(16, activation='relu', input_shape=(X_train.shape[1],),
-                          kernel_regularizer= l2(0.01)),
-                          keras.layers.Dense(8, activation="relu"),
-                          keras.layers.Dense(1, activation="sigmoid")])
+# Compute class weights to handle imbalance
+weights = class_weight.compute_class_weight('balanced', classes=np.unique(y_train), y=y_train)
+class_weights = {i: weights[i] for i in range(len(weights))}
+print(f"Class weights: {class_weights}")
 
-model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
+# Build model
+model = Sequential([
+    tf.keras.Input(shape=(X_train.shape[1],)),
+    Dense(64, activation='relu', kernel_regularizer=l2(0.001)),
+    Dropout(0.3),
+    Dense(32, activation='relu', kernel_regularizer=l2(0.001)),
+    Dropout(0.3),
+    Dense(1, activation='sigmoid')
+])
 
-model.fit(X_train, y_train, epochs=20, batch_size=8, validation_data=(X_test, y_test))
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[tf.keras.metrics.AUC()])
 
-model.save("diabetes_model.h5")
+# Callbacks
+early_stop = EarlyStopping(patience=15, restore_best_weights=True)   # patience increased to allow longer training
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=7, min_lr=1e-6)
 
-print("Model training is completed & saved as diabetes_model.h5")
+# Train model (longer training with safeguards)
+history = model.fit(
+    X_train_scaled, y_train,
+    epochs=300,                # longer max epochs
+    batch_size=32,
+    validation_split=0.2,
+    class_weight=class_weights,
+    callbacks=[early_stop, reduce_lr],
+    verbose=1
+)
+
+# Save model
+model.save("diabetes_model.keras")
+
+# Calculate best threshold based on F1 score
+y_probs = model.predict(X_test_scaled).ravel()
+precision, recall, thresholds = precision_recall_curve(y_test, y_probs)
+f1_scores = 2 * (precision * recall) / (precision + recall + 1e-8)
+best_idx = np.argmax(f1_scores)
+best_threshold = thresholds[best_idx]
+print(f"Best threshold for max F1: {best_threshold:.3f}")
+from sklearn.metrics import accuracy_score, classification_report
+y_pred = (y_probs >= best_threshold).astype(int)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+# Example prediction
+print("Sample prediction (probability):", model.predict(X_test_scaled[0].reshape(1, -1)))
