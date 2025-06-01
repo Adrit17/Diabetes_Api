@@ -72,6 +72,7 @@ An interactive demo of the FastAPI Swagger UI where the `/predict` endpoint can 
 ![swagger_ui](https://github.com/user-attachments/assets/e4879e68-7bbc-409d-bd5f-a1219ad3c57b)
 
 
+## Required Downloades
 ```bash
 pip install tensorflow scikit-learn fastapi joblib uvicorn
 
