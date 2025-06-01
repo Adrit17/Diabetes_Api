@@ -1,4 +1,4 @@
-# Diabetes Prediction API using Deep Neural Network
+![main py](https://github.com/user-attachments/assets/e6ce4458-4fe4-4b22-9863-e1401ead3195)# Diabetes Prediction API using Deep Neural Network
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
@@ -30,11 +30,9 @@ The model handles common medical data preprocessing tasks including unit convers
 
 | Filename       | Description                                    |
 |----------------|------------------------------------------------|
-| `train_test.py`| Script to train, evaluate, and save the model. |
-| `main.py`      | FastAPI app exposing the prediction endpoint.  |
-| `scaler.pkl`   | Saved StandardScaler used in preprocessing.    |
-| `diabetes_model.keras` | Saved trained neural network model.    |
 | `README.md`    | Project overview and instructions.             |
+| `main.py`      | FastAPI app exposing the prediction endpoint.  |
+| `train_test.py`| Script to train, evaluate, and save the model. |
 
 ---
 
@@ -49,5 +47,31 @@ The model handles common medical data preprocessing tasks including unit convers
 
 Install dependencies:
 
+## Training Process (train_test.py)
+
+Here the model training progress including epochs, loss & accuracy metrics are shown
+This GIF shows how the model learns and converges.
+
+![train_test py](https://github.com/user-attachments/assets/3723f4f3-ec55-4ccf-ac95-a88d6a7e2592)
+
+---
+
+## FastAPI Backend (main.py)
+
+This GIF demonstrates the API startup and sample prediction request handling in real-time.
+
+![main py](https://github.com/user-attachments/assets/1b1a00d9-5f10-429b-9d0b-adc23e483997)
+
+
+---
+
+## Swagger UI Demo
+
+An interactive demo of the FastAPI Swagger UI where the `/predict` endpoint can be tested live.
+
+![swagger_ui](https://github.com/user-attachments/assets/e4879e68-7bbc-409d-bd5f-a1219ad3c57b)
+
+
 ```bash
 pip install tensorflow scikit-learn fastapi joblib uvicorn
+
