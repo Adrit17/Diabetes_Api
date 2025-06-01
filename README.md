@@ -1,4 +1,4 @@
-![main py](https://github.com/user-attachments/assets/e6ce4458-4fe4-4b22-9863-e1401ead3195)# Diabetes Prediction API using Deep Neural Network
+## Diabetes Prediction API using Deep Neural Network
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
