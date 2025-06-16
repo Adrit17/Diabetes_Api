@@ -14,7 +14,7 @@ app = FastAPI()
 
 class PatientData(BaseModel):
     Age: float
-    Gender: float
+    Gender: int
     BMI: float
     SBP: float
     DBP: float
@@ -27,9 +27,9 @@ class PatientData(BaseModel):
     BUN: float
     CCR: float
     FFPG: float
-    smoking: float
-    drinking: float
-    family_history: float
+    smoking: int
+    drinking: int
+    family_history: int
 
 def convert_mgdl_to_mmol(feature_dict):
     glucose_factor = 18
