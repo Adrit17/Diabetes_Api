@@ -47,7 +47,7 @@ The model handles common medical data preprocessing tasks including unit convers
 
 Install dependencies:
 
-## Training Process (train_test.py)
+## Training Process (train_model)
 
 Here the model training progress including epochs, loss & accuracy metrics are shown
 This GIF shows how the model learns and converges.
